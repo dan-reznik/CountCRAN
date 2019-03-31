@@ -36,6 +36,9 @@ plot_cran_df <- function(df_cran,brks=1000) {
 
 stop_words <- c("for","and","the","with","from","using")
 
+last_char <- function(s) s%>%str_sub(start=-1)
+all_but_last <- function(s) s%>%str_sub(end=-2)
+
 get_top_words <- function(df,how_many) df %>%
   pull(Title) %>%
   str_squish() %>%
@@ -44,7 +47,11 @@ get_top_words <- function(df,how_many) df %>%
   str_split(" ") %>%
   unlist %>%
   keep(~str_length(.x)>2&!(.x%in%stop_words)) %>%
-  tibble(word=.) %>%
+  tibble(word=.,
+         last_char=last_char(word))%>%
+  # poor man's stemming
+  # remove plurals whose singular are in the table
+  filter(last_char!="s"|!(all_but_last(word)%in%word)) %>%
   count(word,sort=T) %>%
   head(how_many)
 
