@@ -40,12 +40,7 @@ glimpse(df_cran)
 ```{r}
 df_cran %>%
   get_top_words(10) %>%
-  mutate(word=word%>%fct_inorder%>%fct_rev) %>%
-  ggplot(aes(word,n)) +
-  geom_col(aes(fill=word)) +
-  coord_flip() +
-  theme_minimal() +
-  theme(legend.position="none")
+  plot_top_words
 ```
 
 >Plots it! `r emo::ji("chart")` 

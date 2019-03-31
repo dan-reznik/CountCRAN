@@ -47,3 +47,11 @@ get_top_words <- function(df,how_many) df %>%
   tibble(word=.) %>%
   count(word,sort=T) %>%
   head(how_many)
+
+plot_top_words <- function(df) df %>%
+  mutate(word=word%>%fct_inorder%>%fct_rev) %>%
+  ggplot(aes(word,n)) +
+  geom_col(aes(fill=word)) +
+  coord_flip() +
+  theme_minimal() +
+  theme(legend.position="none")
