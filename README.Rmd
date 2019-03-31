@@ -7,7 +7,7 @@ output: github_document
 
 This shows one how to scrape data directly from a website `r emo::ji("spider_web")` (an html table of CRAN packages, structure it as a dataframe and plot it).
 
->Loads packages `r emo::ji("package")` 
+>Loads R packages `r emo::ji("package")` 
 
 ```{r setup,message=F}
 library(tidyverse)
@@ -23,11 +23,27 @@ source("count_cran.R")
 
 >Reads package table (as html) from CRAN and decode it into a dataframe: `r emo::ji("man_technologist")`
 
-```{r}
+```{r,cache=T}
 url_cran <- "http://cran.r-project.org/web/packages/available_packages_by_date.html"
 df_cran <- read_file(url_cran) %>% cran_html_to_df
 nrow(df_cran)
 ```
+
+What's in it?
+
+```{r}
+glimpse(df_cran)
+```
+
+>What are the top 10 words used in package titles?
+
+```{r,cache=T}
+df_cran %>%
+  get_top_words(10) %>%
+  knitr::kable()
+```
+
+
 
 >Plots it! `r emo::ji("chart")` 
 

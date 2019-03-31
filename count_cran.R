@@ -33,3 +33,17 @@ plot_cran_df <- function(df_cran,brks=1000) {
     labs(title=sprintf("%d CRAN packages",total_max),
          subtitle=today()%>%as.character)
 }
+
+stop_words <- c("for","and","the","with","from")
+
+get_top_words <- function(df,how_many) df %>%
+  pull(Title) %>%
+  str_squish() %>%
+  str_to_lower() %>%
+  str_remove_all("[^[:alpha:] ]") %>%
+  str_split(" ") %>%
+  unlist %>%
+  keep(~str_length(.x)>2&!(.x%in%stop_words)) %>%
+  tibble(word=.) %>%
+  count(word,sort=T) %>%
+  head(how_many)
