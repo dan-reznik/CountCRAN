@@ -54,4 +54,5 @@ plot_top_words <- function(df) df %>%
   geom_col(aes(fill=word)) +
   coord_flip() +
   theme_minimal() +
-  theme(legend.position="none")
+  theme(legend.position="none",
+        axis.title.x=element_blank())
