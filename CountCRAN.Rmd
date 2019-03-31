@@ -1,0 +1,38 @@
+---
+title: "Count CRAN Packages"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    social: menu
+    source_code: embed
+---
+
+```{r global,include=F}
+suppressMessages(library(tidyverse))
+library(flexdashboard)
+source("count_cran.R")
+df_cran <- get_cran_file() %>% cran_html_to_df
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+valueBox(nrow(df_cran),
+         icon = "fa-pencil",
+         caption = "total CRAN pkgs",
+         color="success")
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### CRAN pkgs vs month/year
+
+```{r}
+df_cran %>% plot_cran_df()
+```
+
