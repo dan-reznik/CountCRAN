@@ -34,7 +34,7 @@ plot_cran_df <- function(df_cran,brks=1000) {
          subtitle=today()%>%as.character)
 }
 
-stop_words <- c("for","and","the","with","from")
+stop_words <- c("for","and","the","with","from","using")
 
 get_top_words <- function(df,how_many) df %>%
   pull(Title) %>%

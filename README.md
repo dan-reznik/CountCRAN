@@ -45,21 +45,15 @@ glimpse(df_cran)
 ``` r
 df_cran %>%
   get_top_words(10) %>%
-  knitr::kable()
+  mutate(word=word%>%fct_inorder%>%fct_rev) %>%
+  ggplot(aes(word,n)) +
+  geom_col(aes(fill=word)) +
+  coord_flip() +
+  theme_minimal() +
+  theme(legend.position="none")
 ```
 
-| word       |     n|
-|:-----------|-----:|
-| data       |  1584|
-| analysis   |  1141|
-| models     |   683|
-| functions  |   446|
-| tools      |   434|
-| regression |   426|
-| using      |   389|
-| estimation |   364|
-| model      |   354|
-| interface  |   330|
+![](README_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 > Plots it! 💹
 
