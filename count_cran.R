@@ -49,16 +49,19 @@ stem_plurals <- function(ws) {
   ws[tt] # faster than purrr's "keep"
 }
 
-get_top_words <- function(df,how_many) df %>%
-  pull(Title) %>%
+get_word_vector <- function(titles) titles %>%
   str_squish() %>%
   str_to_lower() %>%
   str_remove_all("[^[:alpha:] ]") %>%
   str_split(" ") %>%
-  unlist %>%
+  unlist
+
+get_top_words <- function(df,how_many) df %>%
+  pull(Title) %>%
+  get_word_vector %>%
   stem_short_and_stop %>%
   stem_plurals %>%
-  tibble(word=.)%>%
+  tibble(word=.) %>% # just to use count
   count(word,sort=T) %>%
   head(how_many)
 
