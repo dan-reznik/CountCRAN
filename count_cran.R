@@ -55,4 +55,4 @@ plot_top_words <- function(df) df %>%
   coord_flip() +
   theme_minimal() +
   theme(legend.position="none",
-        axis.title.x=element_blank())
+        axis.title=element_blank())
