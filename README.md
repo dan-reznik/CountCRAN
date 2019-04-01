@@ -10,6 +10,8 @@ This shows one how to scrape data directly from a website 🕸 (an html table of
 library(tidyverse)
 library(ggthemes)
 library(lubridate)
+library(hash)
+library(tictoc)
 ```
 
 > Loads functionality to decode and plot CRAN data 💻

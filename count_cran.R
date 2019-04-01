@@ -44,10 +44,25 @@ last_char <- function(s) s%>%str_sub(start=-1)
 all_but_last <- function(s) s%>%str_sub(end=-2)
 # poor man's stemming
 # convert plurals to singular if latter in supplied word list
-stem_plurals <- function(ws) {
+stem_plurals_in <- function(ws) {
   lc <- last_char(ws)
   abl <- all_but_last(ws)
   if_else(lc=="s"&(abl%in%ws),abl,ws)
+}
+
+# hash::has.key could be faster than %in%
+stem_plurals_hash <- function(ws) {
+  ws_h <- hash(ws,1)
+  lc <- last_char(ws)
+  abl <- all_but_last(ws)
+  if_else(lc=="s"&has.key(abl,ws_h),abl,ws)
+}
+
+stem_plurals <- function(ws,hash) {
+  if (hash)
+    stem_plurals_hash(ws)
+  else
+    stem_plurals_in(ws)
 }
 
 get_word_vector <- function(titles) titles %>%
@@ -57,11 +72,12 @@ get_word_vector <- function(titles) titles %>%
   str_split(" ") %>%
   unlist
 
-get_top_words <- function(df,how_many) df %>%
+get_top_words <- function(df,how_many,hash=F) df %>%
   pull(Title) %>%
   get_word_vector %>%
   remove_short_and_stop %>%
-  stem_plurals %>%
+  #{tic();sp<-stem_plurals(.,hash);toc();sp} %>%
+  stem_plurals(.,hash) %>%
   tibble(word=.) %>% # just to use count
   count(word,sort=T) %>%
   head(how_many)
