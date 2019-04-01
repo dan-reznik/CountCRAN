@@ -35,7 +35,7 @@ plot_cran_df <- function(df_cran,brks=1000) {
 }
 
 stop_words <- c("for","and","the","with","from","using")
-stem_short_and_stop <- function(ws) {
+remove_short_and_stop <- function(ws) {
   tt <- str_length(ws)>2 & !(ws%in%stop_words)
   ws[tt] # faster than purrr's "keep"
 }
@@ -43,10 +43,11 @@ stem_short_and_stop <- function(ws) {
 last_char <- function(s) s%>%str_sub(start=-1)
 all_but_last <- function(s) s%>%str_sub(end=-2)
 # poor man's stemming
-# remove plurals whose singular are on the supplied word list
+# convert plurals to singular if latter in supplied word list
 stem_plurals <- function(ws) {
-  tt <- last_char(ws)!="s" | !(all_but_last(ws)%in%ws)
-  ws[tt] # faster than purrr's "keep"
+  lc <- last_char(ws)
+  abl <- all_but_last(ws)
+  if_else(lc=="s"&(abl%in%ws),abl,ws)
 }
 
 get_word_vector <- function(titles) titles %>%
@@ -59,7 +60,7 @@ get_word_vector <- function(titles) titles %>%
 get_top_words <- function(df,how_many) df %>%
   pull(Title) %>%
   get_word_vector %>%
-  stem_short_and_stop %>%
+  remove_short_and_stop %>%
   stem_plurals %>%
   tibble(word=.) %>% # just to use count
   count(word,sort=T) %>%
