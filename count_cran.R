@@ -28,17 +28,20 @@ plot_cran_df <- function(df_cran,brks=1000) {
            total=cumsum(n))
   total_max <- max(df_cran2$total)%>%as.integer
   total_ceil <- ceiling(total_max/brks)*brks
-  df_cran2 %>%
-    ggplot(aes(ym,total)) +
-    geom_line(color="blue") + #+geom_smooth()
-    scale_x_date(date_breaks="1 year",date_labels = "%m/%y") +
-    scale_y_continuous(breaks=seq(0,total_ceil,brks),
-                       minor_breaks=seq(0,total_ceil,brks)) +
-    labs(title=sprintf("%d CRAN packages",total_max),
-         subtitle=today()%>%as.character) +
-    theme_economist() +
-    theme(axis.text.x = element_text(angle = 45,vjust=1,hjust=1),
-          axis.title=element_blank())
+  df_cran2 %>% {
+    ggplot(.,aes(ym,total)) +
+      geom_line(color="blue") + #+geom_smooth()
+      geom_point(color="black",size=.5,data=.%>%
+                   filter(year(ym)<2010|month(ym)%in%c(1,7))) +
+      scale_x_date(date_breaks="6 month",date_labels = "%m-%y") +
+      scale_y_continuous(breaks=seq(0,total_ceil,brks),
+                         minor_breaks=seq(0,total_ceil,brks)) +
+      labs(title=sprintf("%d CRAN packages",total_max),
+           subtitle=today()%>%as.character) +
+      theme_economist() +
+      theme(axis.text.x = element_text(angle = -60,vjust=.2,hjust=0,size=8),
+            axis.title=element_blank())
+  }
 }
 
 stop_words <- c("for","and","the","with","from","using")
