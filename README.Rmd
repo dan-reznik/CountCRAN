@@ -12,9 +12,6 @@ This shows one how to scrape data directly from a website `r emo::ji("spider_web
 ```{r setup,message=F}
 library(tidyverse)
 library(ggthemes)
-library(lubridate)
-library(hash)
-library(tictoc)
 ```
 
 >Loads functionality to decode and plot CRAN data `r emo::ji("computer")`
@@ -48,9 +45,7 @@ df_cran %>%
 >Plots it! `r emo::ji("chart")` 
 
 ```{r}
-df_cran %>%
-  plot_cran_df +
-  theme_economist()
+df_cran %>% plot_cran_df
 ```
 
 >There you have it! R is growing exponentially!`r emo::ji("smile")`

@@ -1,3 +1,7 @@
+library(lubridate)
+library(hash)
+library(tictoc)
+
 # <tr> <th> Date </th> <th> Package </th> <th> Title </th> </tr>\n<tr> <td> 2019-03-26 </td> <td> <a href=\"../../web/packages/BIOMASS/index.html\">BIOMASS</a> </td> <td> Estimating Aboveground Biomass and Its Uncertainty in Tropical\nForests </td> </tr>
 
 cran_html_to_df <- function(file_html) {
@@ -31,7 +35,10 @@ plot_cran_df <- function(df_cran,brks=1000) {
     scale_y_continuous(breaks=seq(0,total_ceil,brks),
                        minor_breaks=seq(0,total_ceil,brks)) +
     labs(title=sprintf("%d CRAN packages",total_max),
-         subtitle=today()%>%as.character)
+         subtitle=today()%>%as.character) +
+    theme_economist() +
+    theme(axis.text.x = element_text(angle = 45,vjust=1,hjust=1),
+          axis.title=element_blank())
 }
 
 stop_words <- c("for","and","the","with","from","using")
