@@ -5,26 +5,31 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-This shows one how to scrape data directly from a website `r emo::ji("spider_web")` (an html table of CRAN packages, structure it as a dataframe and plot it).
+This shows one how to scrape data directly from a website
 
->Loads R packages `r emo::ji("package")` 
+<!-- `r emo::ji("spider_web")` -->
+
+(an html table of CRAN packages, structure it as a dataframe and plot it).
+
+> Loads R packages `r emo::ji("package")`
 
 ```{r setup,message=F}
 library(tidyverse)
 library(ggthemes)
 ```
 
->Loads functionality to decode and plot CRAN data `r emo::ji("computer")`
+> Loads functionality to decode and plot CRAN data `r emo::ji("computer")`
 
 ```{r}
 source("count_cran.R")
 ```
 
->Reads package table (as html) from CRAN and decode it into a dataframe: `r emo::ji("man_technologist")`
+> Reads package table (as html) from CRAN and decode it into a dataframe: `r emo::ji("man_technologist")`
 
 ```{r,cache=T}
 url_cran <- "http://cran.r-project.org/web/packages/available_packages_by_date.html"
-df_cran <- read_file(url_cran) %>% cran_html_to_df
+df_cran_pre <- read_file(url_cran)
+df_cran <- df_cran_pre %>% cran_html_to_df
 nrow(df_cran)
 ```
 
@@ -34,7 +39,7 @@ What's in it?
 glimpse(df_cran)
 ```
 
->What are the top 10 words used in package titles?
+> What are the top 10 words used in package titles?
 
 ```{r}
 df_cran %>%
@@ -42,10 +47,10 @@ df_cran %>%
   plot_top_words
 ```
 
->Plots it! `r emo::ji("chart")` 
+> Plots it! `r emo::ji("chart")`
 
 ```{r}
 df_cran %>% plot_cran_df
 ```
 
->There you have it! R is growing exponentially!`r emo::ji("smile")`
+> There you have it! R is growing exponentially!`r emo::ji("smile")`

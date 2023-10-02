@@ -16,7 +16,10 @@ cran_html_to_df <- function(file_html) {
     str_remove_all("</a>") %>%
     str_remove_all(fixed('"')) %>%
     str_replace_all(" <t[dh]> ","|")
-  file_csv %>% read_delim(delim=fixed("|"))
+  file_csv %>% write_lines("temp.csv")
+  # should be able to do this in memory
+  df <- read_delim("temp.csv",delim=fixed("|"))
+  df
 }
 
 plot_cran_df <- function(df_cran,brks=1000) {
@@ -34,8 +37,9 @@ plot_cran_df <- function(df_cran,brks=1000) {
       geom_point(color="black",size=.5,data=.%>%
                    filter(year(ym)<2010|month(ym)%in%c(1,7))) +
       scale_x_date(date_breaks="6 month",date_labels = "%m-%y") +
-      scale_y_continuous(breaks=seq(0,total_ceil,brks),
-                         minor_breaks=seq(0,total_ceil,brks)) +
+      scale_y_log10() +
+      #scale_y_continuous(breaks=seq(0,total_ceil,brks),
+       #                  minor_breaks=seq(0,total_ceil,brks)) +
       labs(title=sprintf("%d CRAN packages",total_max),
            subtitle=today()%>%as.character) +
       theme_economist() +
